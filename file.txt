@@ -1,1 +1,86 @@
-hello
+#!/bin/bash
+
+echo " Network Troubleshooting Report="
+
+echo -e "\n[1] Checking IP address and network interfaces:" ip addr show
+
+echo -e "\n[2] Default gateway:" ip route | grep default
+
+echo -e "\n[3] DNS resolution test:" nslookup google.com
+
+echo -e "\n[4] Checking connectivity to external server:" ping -c 4 8.8.8.8
+
+echo -e "\n[5] Traceroute to google.com:" traceroute google.com
+
+echo -e "\n[6] Display current connections and listening ports:"
+
+netstat -tulnp
+
+echo -e "\n[7] Display routing table:"
+
+netstat -rn
+
+echo -e "\nNetwork diagnostics
+
+
+
+# Interface and duration as optional arguments
+
+INTERFACE=${1:-eth0}
+
+DURATION=$ {2:-30}
+
+OUTPUT_FILE="capture_$(date +%Y%m%d_%H%M%S).pcap"
+
+echo "Capturing packets on SINTERFACE for $DURATION seconds..." sudo timeout "$DURATION" tepdump -i "$INTERFACE" -w "$OUTPUT_FILE"
+
+echo "Capture complete. File saved as SOUTPUT FILE"
+
+
+
+#!/bin/bash
+
+# Usage: ./service control.sh <service> <action> # Example: ./service_control.sh apache2 restart
+
+SERVICE=$1 ACTION=$2
+
+if [[ -z "$SERVICE" || -z "$ACTION" ]]; then echo "Usage: $0 <service> <start|stop|restart>" exit 1
+
+fi
+
+if systemctl list-units --type=service | grep -q "$SERVICE"; then sudo systemctl "$ACTION" "SSERVICE" echo "$SERVICE has been $ACTIONed."
+
+else
+
+fi
+
+echo "Service '$SERVICE' not found.
+
+
+
+
+
+
+#!/bin/bash
+
+# List of services to monitor SERVICES=("apache2" "nginx" "mysql")
+
+for service in "${SERVICES[@]}"; do if systemctl is-active --quiet "Sservice"; then echo "$service is running."
+
+PCCSL308 shell scripting and
+
+network administration using Linux lab
+
+39
+
+Department of Computer Science, MITS Varikoli
+
+else
+
+echo "ALERT: $service is not running. Restarting..."
+
+sudo systemctl restart "Sservice"
+
+echo "$service has been restarted."
+
+done
