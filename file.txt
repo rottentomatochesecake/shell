@@ -1,73 +1,64 @@
-from pynput import keyboard
+import random
 
-# Log file to store keystrokes
+def miller_rabin(n, k=5):  # k = number of rounds
+    if n == 2 or n == 3:
+        return True
+    if n <= 1 or n % 2 == 0:
+        return False
 
-log_file = "keylog_output.txt"
+    # Step 1: write n-1 as 2^s * d
+    s, d = 0, n - 1
+    while d % 2 == 0:
+        s += 1
+        d //= 2
 
-def on_press(key):
+    # Step 2: perform k tests
+    for _ in range(k):
+        a = random.randrange(2, n - 1)
+        x = pow(a, d, n)  # a^d % n
+        if x == 1 or x == n - 1:
+            continue
+        for _ in range(s - 1):
+            x = pow(x, 2, n)
+            if x == n - 1:
+                break
+        else:
+            return False  # Composite
+    return True  # Probably prime
 
-except AttributeError:
 
-with open(log file, "a") as file: ile.write(f" {key.char}")
+# ---- SAMPLE TEST CASES ----
+numbers = [21, 97, 561, 7919]
 
-with open(log_file, "a") as file: file.write(f"[{key}]")
+for num in numbers:
+    result = miller_rabin(num)
+    print(f"{num} -> {'Probably Prime' if result else 'Composite'}")
 
-# Start keylogger
 
-with keyboard.Listener(on_press=on_press) as listener: listener.join(
 
-Instructions
 
-Install required package:
+def lcg(seed, a=1664525, c=1013904223, m=2**32, n=10):
+    random_numbers = []
+    x = seed
+    for _ in range(n):
+        x = (a * x + c) % m
+        random_numbers.append(x)
+    return random_numbers
 
-pip install pynput
+# Generate 10 pseudo-random numbers with seed 42
+seed = 42
+numbers = lcg(seed)
+print("LCG Pseudo-Random Numbers:")
+for num in numbers:
+    print(num)
 
-Run the script:
 
-python keylogger.py
 
-2.
 
-3.
 
-4.
 
-5. Keystrokes s are are saved to keylog_output.txt.
+import random
 
-PART b) Python Keylogger Detection Tool
-
-File: detect_keylogger.py
-
-import psutil
-
-# List of suspicious terms commonly used in keylogger scripts
-
-suspicious terms = ["keylogger", "pynput", "keyboard", "hook", "listener"]
-
-PCCSL308 shell scripting and
-
-network administration using Linux lab
-
-47
-
-Department of Computer Science, MITS Varikoli
-
-found False
-
-for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-
-mdline =''.join(proc.info['cmdline']).lower()
-
-if any(term in cmdline for term in suspicious_terms):
-
-print(f"[ ALERT] Suspicious process found: {proc.info}")
-
-found = True
-
-except (psutil.NoSuchProcess, psutil. AccessDenied, psutil.ZombieProcess):
-
-continue
-
-if not found:
-
-print(" No suspicious keylogger-like processes detected.")
+print("Random Integer (1 to 100):", random.randint(1, 100))
+print("Random Float (0.0 to 1.0):", random.random())
+print("Random Choice from List:", random.choice(['apple', 'banana', 'cherry']))
