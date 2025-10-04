@@ -1,64 +1,83 @@
-import random
+import socket
 
-def miller_rabin(n, k=5):  # k = number of rounds
-    if n == 2 or n == 3:
-        return True
-    if n <= 1 or n % 2 == 0:
-        return False
+#Create TCP socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    # Step 1: write n-1 as 2^s * d
-    s, d = 0, n - 1
-    while d % 2 == 0:
-        s += 1
-        d //= 2
+# Bind to localhost on port 12345
+server_socket.bind(('localhost', 12345))
+server_socket.listen(1)
+print("Server is listening on port 12345...")
 
-    # Step 2: perform k tests
-    for _ in range(k):
-        a = random.randrange(2, n - 1)
-        x = pow(a, d, n)  # a^d % n
-        if x == 1 or x == n - 1:
-            continue
-        for _ in range(s - 1):
-            x = pow(x, 2, n)
-            if x == n - 1:
-                break
-        else:
-            return False  # Composite
-    return True  # Probably prime
+# Accept connection
+conn, addr = server_socket.accept()
+print(f"Connected by {addr}")
 
+# Receive and respond
+data = conn.recv(1024).decode()
+print("Received from client:", data)
+conn.send("Hello from server!".encode())
 
-# ---- SAMPLE TEST CASES ----
-numbers = [21, 97, 561, 7919]
-
-for num in numbers:
-    result = miller_rabin(num)
-    print(f"{num} -> {'Probably Prime' if result else 'Composite'}")
-
-
-
-
-def lcg(seed, a=1664525, c=1013904223, m=2**32, n=10):
-    random_numbers = []
-    x = seed
-    for _ in range(n):
-        x = (a * x + c) % m
-        random_numbers.append(x)
-    return random_numbers
-
-# Generate 10 pseudo-random numbers with seed 42
-seed = 42
-numbers = lcg(seed)
-print("LCG Pseudo-Random Numbers:")
-for num in numbers:
-    print(num)
+conn.close()
 
 
 
 
 
 
-import random
+import socket
 
-print("Random Integer (1 to 100):", random.randint(1, 100))
-print("Random Float (0.0 to 1.0):", random.random())
-print("Random Choice from List:", random.choice(['apple', 'banana', 'cherry']))
+# Create TCP socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Connect to the server
+client_socket.connect(('localhost', 12345))
+
+# Send message
+client_socket.send("Hello from client!".encode())
+
+# Receive response
+data = client_socket.recv(1024).decode()
+print("Received from server:", data)
+
+client_socket.close()
+
+
+
+
+
+
+import socket
+
+#Create UDP socket
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# Bind to localhost and port
+server_socket.bind(('localhost', 12345))
+print("UDP Server is listening on port 12345...")
+
+#Receive data
+data, addr = server_socket.recvfrom(1024)
+print("Received from client:", data.decode())
+
+# Send response
+server_socket.sendto("Hello from UDP Server!".encode(), addr)
+
+server_socket.close()
+
+
+
+
+import socket
+
+# Create UDP socket
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+# Send message to server
+server_socket_address = ('localhost', 12345)
+client_socket.sendto("Hello from UDP Client!".encode(), server_socket_address)
+
+# Receive response
+data, addr = client_socket.recvfrom(1024)
+print("Received from server:", data.decode())
+
+client_socket.close()
